@@ -242,12 +242,40 @@
       { name: "Skull Crack", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 2, drainActions: 1, qty: 5, icon: "🧱", effect: "Deals 2 HP damage and target loses 1 Action.", flavor: "Produces immediate concussive ringing in the ears." },
       { name: "Combined Sacrifice", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 3, selfDamage: 1, qty: 5, icon: "🩸", effect: "Lose 1 HP to deal 3 Damage.", flavor: "Blood is just another type of mana if you squeeze hard enough." },
       { name: "Reverse Intoxication", type: "offensive", cost: 0, target: "single", requiresTarget: true, gainMana: 1, qty: 5, icon: "🤢", effect: "Force target to take a drink IRL! You gain 1 Mana.", flavor: "I drink, you suffer. A flawless exchange." },
+      { name: "Dismantle", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 2, destroyArtifact: true, qty: 5, icon: "⚙️", effect: "Deals 2 HP damage and destroys target's equipped Artifact.", flavor: "Disassembled an enemy golem into 400 rattling copper gears." },
+      { name: "Siphon Spark", type: "offensive", cost: 1, target: "single", requiresTarget: true, dmg: 1, gainActions: 1, qty: 6, icon: "⚡", effect: "Deals 1 HP damage and restores 1 Action to you.", flavor: "Sucks kinetic speed out of a target's marrow." },
+      { name: "Glacial Lance", type: "offensive", cost: 4, target: "single", requiresTarget: true, dmg: 4, bypassArmor: true, qty: 4, icon: "🧊", effect: "Deals 4 HP damage, bypassing all Armor.", flavor: "Pierced a frozen mammoth in half during its maiden trial." },
+      { name: "Cinder Breath", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 3, selfDamage: 1, qty: 5, icon: "🔥", effect: "Deals 3 HP damage, but you take 1 HP damage.", flavor: "The inventor burned his own mustache off instantly." },
+      { name: "Bile Vomit", type: "offensive", cost: 1, target: "single", requiresTarget: true, dmg: 1, stripArmor: 2, qty: 5, icon: "🤢", effect: "Deals 1 HP damage and dissolves 2 Armor.", flavor: "Leaves a catastrophic aftertaste of rancid fish." },
+      { name: "Thunderclap", type: "offensive", cost: 3, target: "all_enemies", requiresTarget: false, dmg: 1, forceDiscard: 1, qty: 4, icon: "🌩️", effect: "Deals 1 HP damage and forces all enemies to discard 1 card.", flavor: "Detonated an entire flock of roosting harpies out of the sky." },
+      { name: "Pyre Blast", type: "offensive", cost: 4, actions: 2, target: "single", requiresTarget: true, dmg: 5, selfDamage: 1, qty: 3, icon: "🌋", effect: "Costs 2 Actions. Deals 5 HP damage to target and 1 HP to yourself.", flavor: "The smell of burning pig fat will linger on your clothes." },
+      { name: "Leech Swarm", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 2, heal: 2, qty: 5, icon: "🦇", effect: "Deals 2 HP damage and heals you for 2 HP.", flavor: "Leeches must be manually squished off your cuffs afterwards." },
+      { name: "Shatter Hand", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 2, forceDiscard: 1, drainActions: 1, qty: 4, icon: "🖐️", effect: "Deals 2 HP damage. Target discards 1 card and loses 1 Action.", flavor: "Finger-cracking sound will turn weak stomachs." },
+      { name: "Void Crush", type: "offensive", cost: 5, actions: 2, target: "single", requiresTarget: true, dmg: 5, bypassArmor: true, qty: 3, icon: "🕳️", effect: "Costs 2 Actions. Deals 5 HP damage directly to health.", flavor: "The pressure pop can cause casters' ears to bleed." },
+      { name: "Gut Rake", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 2, drainMana: 1, qty: 5, icon: "🪝", effect: "Deals 2 HP damage and drains 1 Mana.", flavor: "Conjures phantom barbed wire in the intestines." },
+      { name: "Stinging Cloud", type: "offensive", cost: 1, target: "all_enemies", requiresTarget: false, dmg: 1, qty: 6, icon: "🦟", effect: "Deals 1 HP damage to all enemies.", flavor: "Gnats will fly into nostrils and ears without prejudice." },
+      { name: "Splinter Blast", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 3, discardSelf: 1, qty: 5, icon: "🪵", effect: "Deals 3 HP damage, but you must discard 1 random card.", flavor: "Paper cuts inflicted by this spell will sting perpetually." },
+      { name: "Concussive Wave", type: "offensive", cost: 3, target: "all_enemies", requiresTarget: false, dmg: 1, stripArmor: 1, drainActions: 1, qty: 4, icon: "🌊", effect: "Deals 1 HP damage, strips 1 Armor, and drains 1 Action from all enemies.", flavor: "Shakes loose dental work and dentures." },
+      { name: "Rend Flesh", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 3, stripArmor: 1, qty: 5, icon: "🔪", effect: "Deals 3 HP damage and strips 1 Armor.", flavor: "Splatters gory marrow across the caster’s sleeves." },
+      { name: "Iron Rain", type: "offensive", cost: 4, actions: 2, target: "all_enemies", requiresTarget: false, dmg: 3, qty: 3, icon: "🌧️", effect: "Costs 2 Actions. Deals 3 HP damage to all enemies.", flavor: "Wear a heavy iron helmet or suffer self-inflicted cranial holes." },
+      { name: "Brain Melt", type: "offensive", cost: 4, target: "single", requiresTarget: true, dmg: 2, stealMana: 3, qty: 4, icon: "🧠", effect: "Deals 2 HP damage and steals 3 Mana.", flavor: "The scent of cooked brain tissue can linger in your nose." },
+      { name: "Arcane Guillotine", type: "offensive", cost: 5, actions: 2, target: "single", requiresTarget: true, dmg: 6, bypassArmor: true, qty: 2, icon: "🩸", effect: "Costs 2 Actions. Deals 6 HP damage, ignoring Armor.", flavor: "If it fails, the severed rope rebounds directly into your wrists." },
+      { name: "Sever Tendon", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 1, drainActions: 2, qty: 5, icon: "🪓", effect: "Deals 1 HP damage and drains 2 Actions.", flavor: "Highly graphic snapping sound accompanies casting." },
+      { name: "Magma Dart", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 3, stripArmor: 1, qty: 5, icon: "🌋", effect: "Deals 3 HP damage and destroys 1 Armor.", flavor: "Leaves permanent black carbon marks on fingers." },
+      { name: "Pummel", type: "offensive", cost: 2, target: "single", requiresTarget: true, dmg: 3, qty: 5, icon: "🥊", effect: "Deals 3 HP damage in rapid succession.", flavor: "May cause phantom bruising on your own knuckles." },
+      { name: "Soul Rake", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 2, gainMana: 2, qty: 5, icon: "👻", effect: "Deals 2 HP damage and you gain 2 Mana.", flavor: "Belching after casting emits eerie ghostly screams." },
+      { name: "Infernal Strike", type: "offensive", cost: 4, target: "single", requiresTarget: true, dmg: 4, selfDamage: 1, qty: 4, icon: "🔥", effect: "Deals 4 HP damage, but you take 1 HP damage.", flavor: "The smell of burning brimstone will alert predatory demons." },
+      { name: "Bone Spear", type: "offensive", cost: 3, target: "single", requiresTarget: true, dmg: 3, bypassArmor: true, qty: 4, icon: "🦴", effect: "Deals 3 HP damage, piercing all Armor.", flavor: "Rattles noisily before firing; ruins stealth." },
+      { name: "Oblivion Dart", type: "offensive", cost: 5, actions: 2, target: "single", requiresTarget: true, dmg: 5, bypassArmor: true, qty: 2, icon: "🕳️", effect: "Costs 2 Actions. Deals 5 HP damage directly to HP.", flavor: "Prolonged exposure erases your earliest childhood memory." },
 
       // DEFENSIVE SPELLS
       { name: "Magic Shield", type: "defensive", cost: 2, target: "self", requiresTarget: false, armor: 3, qty: 8, icon: "🛡️", effect: "Gain 3 Armor (absorbs next 3 damage).", flavor: "Standard issue for the Potion Institute's dueling club." },
       { name: "Reflect", type: "defensive", cost: 3, target: "single", requiresTarget: true, armor: 1, dmg: 1, qty: 6, icon: "🪞", effect: "Gain 1 Armor. Target enemy takes 1 Damage.", flavor: "'No, you.' - Archchancellor Albert's famous counter-argument." },
       { name: "Crystal Aegis", type: "defensive", cost: 3, target: "self", requiresTarget: false, armor: 4, qty: 5, icon: "💎", effect: "Gain 4 Armor.", flavor: "Heavy, uncomfortable, but better than being incinerated." },
       { name: "Mirror Image", type: "defensive", cost: 0, target: "self", requiresTarget: false, armor: 1, gainMana: 1, qty: 6, icon: "👥", effect: "Gain 1 Armor and 1 Mana.", flavor: "Who is the real me? Does it even matter?" },
+      { name: "Barkskin", type: "defensive", cost: 1, target: "self", requiresTarget: false, armor: 2, qty: 6, icon: "🌳", effect: "Gain 2 Armor.", flavor: "Leaves your skin uncomfortably flaky." },
+      { name: "Iron Maiden", type: "defensive", cost: 3, target: "self", requiresTarget: false, armor: 3, gainMana: 2, qty: 4, icon: "⚰️", effect: "Gain 3 Armor and 2 Mana.", flavor: "Snaps shut around you. Claustrophobics need not apply." },
+      { name: "Shadow Cloak", type: "defensive", cost: 2, target: "self", requiresTarget: false, armor: 2, stealCard: true, qty: 5, icon: "🧥", effect: "Gain 2 Armor and steal 1 card from a random enemy.", flavor: "Woven from the dark corners of a tavern." },
 
       // SUPPORT SPELLS
       { name: "Aid", type: "support", cost: 1, target: "self", requiresTarget: false, armor: 2, qty: 6, icon: "🩹", effect: "Gain 2 Armor.", flavor: "Makes your chest itch uncontrollably." },
@@ -264,6 +292,36 @@
       { name: "Margo's Hidden Hand", type: "support", cost: 2, target: "self", requiresTarget: false, applyStatus: { type: "costReduction", amount: 1, turns: 3 }, qty: 4, icon: "🤚", effect: "Spells cost 1 less Mana for 3 turns.", flavor: "A phantom limb writes your runes. Every cast costs 1 less Mana for 3 turns." },
       { name: "Tome Swap", type: "support", cost: 0, target: "single", requiresTarget: true, tomeSwap: true, qty: 6, icon: "🔄", effect: "Swap a card of your choice for a random card from target's hand.", flavor: "I'll trade you this ancient curse for that... shiny rock?" },
       { name: "Stolen Knowledge", type: "support", cost: 0, target: "single", requiresTarget: true, stealCard: true, qty: 6, icon: "🧠", effect: "Steal a random card from target's hand.", flavor: "Knowledge is power. Your knowledge is now my power." },
+      { name: "Clothing Alteration", type: "support", cost: 0, target: "self", requiresTarget: false, discardSelf: 1, gainMana: 2, qty: 5, icon: "👔", effect: "Discard 1 card to gain 2 Mana.", flavor: "Seams tend to unravel at the most embarrassing social moments." },
+      { name: "Daylight", type: "support", cost: 2, target: "all_enemies", requiresTarget: false, stripArmor: 99, drawCards: 1, qty: 4, icon: "☀️", effect: "Destroys all enemy Armor and draw 1 card.", flavor: "Causes sudden severe sunburn on the nose." },
+      { name: "Displace", type: "support", cost: 2, target: "self", requiresTarget: false, armor: 2, gainMana: 2, qty: 5, icon: "🌀", effect: "Gain 2 Armor and 2 Mana.", flavor: "Makes you severely motion-sick when trying to walk." },
+      { name: "Enlarge", type: "support", cost: 2, target: "self", requiresTarget: false, applyStatus: { type: "costReduction", amount: 2, turns: 1 }, qty: 4, icon: "🍄", effect: "Your spells cost 2 less Mana next turn.", flavor: "Trousers rarely survive the enlargement ritual." },
+      { name: "Filch", type: "support", cost: 1, target: "single", requiresTarget: true, stealMana: 1, stealCard: true, qty: 6, icon: "🦝", effect: "Steal 1 Mana and 1 card from target.", flavor: "You grab whatever lint and spiders live in their pocket." },
+      { name: "Floating Disc", type: "support", cost: 1, target: "self", requiresTarget: false, gainMana: 3, qty: 5, icon: "🛸", effect: "Gain 3 Mana.", flavor: "Disc vanishes instantly if you lose consciousness." },
+      { name: "Guidance", type: "support", cost: 0, target: "self", requiresTarget: false, applyStatus: { type: "costReduction", amount: 1, turns: 1 }, qty: 6, icon: "👻", effect: "Your next spell costs 1 less Mana.", flavor: "Spirits frequently complain about their back pain." },
+      { name: "Gust", type: "support", cost: 1, target: "all_enemies", requiresTarget: false, gainActions: 1, stripArmor: 99, qty: 5, icon: "🌪️", effect: "Gain 1 Action and blow away all opponent Armor.", flavor: "Blew the Archchancellor's powdered wig clean out the window." },
+      { name: "Haste", type: "support", cost: 2, target: "self", requiresTarget: false, gainActions: 3, qty: 4, icon: "⚡", effect: "Instantly gain 3 Actions.", flavor: "Crash hits hard; you will feel starved afterwards." },
+      { name: "Heroism", type: "support", cost: 2, target: "self", requiresTarget: false, armor: 3, heal: 2, qty: 4, icon: "🛡️", effect: "Gain 3 Armor and heal 2 HP.", flavor: "Completely disables the survival instinct." },
+      { name: "Identify", type: "support", cost: 0, target: "self", requiresTarget: false, drawCards: 1, gainMana: 1, qty: 6, icon: "🔍", effect: "Draw 1 card and gain 1 Mana.", flavor: "Some cursed histories cannot be unseen." },
+      { name: "Knock", type: "support", cost: 2, target: "single", requiresTarget: true, stealMana: 3, qty: 5, icon: "🚪", effect: "Steal 3 Mana from target.", flavor: "The sonic boom leaves you temporarily deaf." },
+      { name: "Mage Hand", type: "support", cost: 0, actions: 0, target: "self", requiresTarget: false, drawCards: 1, qty: 6, icon: "🖐️", effect: "Costs 0 Actions. Draw 1 card.", flavor: "Prone to acting on impulsive intrusive thoughts." },
+      { name: "Makeover", type: "support", cost: 0, target: "self", requiresTarget: false, heal: 1, gainMana: 1, qty: 5, icon: "✨", effect: "Heal 1 HP and gain 1 Mana.", flavor: "If cast wrong, eyebrows can end up on your forehead." },
+      { name: "Manse", type: "support", cost: 4, actions: 2, target: "self", requiresTarget: false, heal: 4, armor: 2, qty: 3, icon: "🏡", effect: "Costs 2 Actions. Heal 4 HP and gain 2 Armor.", flavor: "Spectral tea and biscuits vanish upon leaving the front door." },
+      { name: "Pacify", type: "support", cost: 2, target: "single", requiresTarget: true, drainActions: 2, drainMana: 1, qty: 4, icon: "🕊️", effect: "Target loses 2 Actions and 1 Mana.", flavor: "The pacifist haze wears off into violent fury." },
+      { name: "Rock to Mud", type: "support", cost: 2, target: "all_enemies", requiresTarget: false, stripArmor: 2, armor: 2, qty: 4, icon: "🪨", effect: "Remove 2 Armor from all enemies and gain 2 Armor.", flavor: "Dries into rock again rapidly; don't stand still." },
+      { name: "Blood Ward", type: "defensive", cost: 1, target: "self", requiresTarget: false, selfDamage: 1, armor: 4, qty: 5, icon: "🩸", effect: "Sacrifice 1 HP to gain 4 Armor.", flavor: "Turns your own hemoglobin into a solid iron-rich shell." },
+      { name: "Flesh Cocoon", type: "defensive", cost: 4, target: "self", requiresTarget: false, armor: 5, heal: 1, qty: 3, icon: "🫀", effect: "Gain 5 Armor and heal 1 HP.", flavor: "Warm, pulsing, and completely disgusting to look at." },
+      { name: "Panic Barrier", type: "defensive", cost: 1, actions: 0, target: "self", requiresTarget: false, armor: 2, qty: 6, icon: "🧱", effect: "Costs 0 Actions. Gain 2 Armor.", flavor: "Cast instantly when you realize you've made a terrible mistake." },
+      { name: "Aura of Flies", type: "defensive", cost: 2, target: "all_enemies", requiresTarget: false, armor: 1, dmg: 1, qty: 4, icon: "🪰", effect: "Gain 1 Armor and deal 1 HP damage to all enemies.", flavor: "A buzzing shield of corpse-flies that bites anyone too close." },
+      { name: "Grave Dirt", type: "defensive", cost: 1, target: "self", requiresTarget: false, armor: 1, drawCards: 1, qty: 6, icon: "⚰️", effect: "Gain 1 Armor and draw 1 card.", flavor: "Pocket sand, but from a freshly dug cemetery." },
+      { name: "Kinetic Rebound", type: "defensive", cost: 3, target: "single", requiresTarget: true, armor: 2, forceDiscard: 1, qty: 5, icon: "🔄", effect: "Gain 2 Armor and force target to discard 1 card.", flavor: "Bounces their spells back hard enough to rattle their pockets." },
+      { name: "Glacial Wall", type: "defensive", cost: 3, target: "single", requiresTarget: true, armor: 3, drainActions: 1, qty: 4, icon: "🧊", effect: "Gain 3 Armor and target loses 1 Action.", flavor: "So cold it freezes the enemy's joints mid-swing." },
+      { name: "Ethereal Shift", type: "defensive", cost: 2, target: "self", requiresTarget: false, armor: 1, gainActions: 1, qty: 5, icon: "👻", effect: "Gain 1 Armor and 1 Action.", flavor: "Phase out of reality just long enough to sidestep a blade." },
+      { name: "Mana Bastion", type: "defensive", cost: 4, target: "self", requiresTarget: false, armor: 3, gainMana: 3, qty: 3, icon: "🔮", effect: "Gain 3 Armor and 3 Mana.", flavor: "A fortress built of pure, crackling blue energy." },
+      { name: "Bone Shield", type: "defensive", cost: 1, target: "self", requiresTarget: false, armor: 2, gainMana: 1, qty: 5, icon: "💀", effect: "Gain 2 Armor and 1 Mana.", flavor: "Constructed from the femurs of the last guy who challenged you." },
+      { name: "Scrap Armor", type: "defensive", cost: 0, target: "self", requiresTarget: false, armor: 1, qty: 7, icon: "🗑️", effect: "Gain 1 Armor.", flavor: "Strapping a rusty cauldron to your chest is better than nothing." },
+      { name: "Repelling Force", type: "defensive", cost: 2, target: "single", requiresTarget: true, armor: 2, stripArmor: 1, qty: 5, icon: "🧲", effect: "Gain 2 Armor and destroy 1 of target's Armor.", flavor: "A violent magnetic push that bends incoming iron." },
+      { name: "Vampiric Aegis", type: "defensive", cost: 3, target: "single", requiresTarget: true, armor: 2, stealMana: 1, qty: 4, icon: "🦇", effect: "Gain 2 Armor and steal 1 Mana from target.", flavor: "The shield drinks their magical essence on impact." },
 
       // ARTIFACTS
       { name: "Spellbook", type: "artifact", cost: 4, target: "self", requiresTarget: false, artifactObj: { id: "spellbook", name: "Spellbook", icon: "📖", desc: "Hand limit +1" }, qty: 6, icon: "📖", effect: "Equipped: Hand limit +1.", flavor: "Bound in questionable leather. Do not read aloud." },
@@ -272,18 +330,36 @@
       { name: "Amulet of Fortitude", type: "artifact", cost: 5, target: "self", requiresTarget: false, artifactObj: { id: "amulet", name: "Amulet", icon: "🧿", desc: "Gain 2 Armor" }, armor: 2, qty: 5, icon: "🧿", effect: "Equipped: Gain 2 Armor.", flavor: "It's literally just a really thick iron plate on a chain." },
       { name: "Spike Armor", type: "artifact", cost: 3, target: "self", requiresTarget: false, artifactObj: { id: "spike_armor", name: "Spike Armor", icon: "🦔", desc: "Reflects 1 dmg. Breaks after 2 hits.", durability: 2 }, qty: 5, icon: "🦔", effect: "Reflects 1 dmg. Breaks after 2 hits.", flavor: "Hugging is strictly prohibited while equipped." },
       { name: "Shield of Void", type: "artifact", cost: 3, target: "self", requiresTarget: false, artifactObj: { id: "shield_of_void", name: "Void Shield", icon: "🌌", desc: "Regen 1 Mana per damage taken.", duration: 2 }, qty: 5, icon: "🌌", effect: "Regen 1 Mana per damage taken. Lasts 2 turns.", flavor: "Eats kinetic energy and spits out raw arcane power." },
+      { name: "Cursed Crown", type: "artifact", cost: 5, target: "self", requiresTarget: false, artifactObj: { id: "bandolier", name: "Cursed Crown", icon: "👑", desc: "Hand limit +2" }, qty: 3, icon: "👑", effect: "Equipped: Hand limit +2.", flavor: "Whispers terrible financial advice into your ears." },
+      { name: "Goblin's Mug", type: "artifact", cost: 2, target: "self", requiresTarget: false, artifactObj: { id: "ring", name: "Goblin's Mug", icon: "🍺", desc: "Potions +1 Mana" }, qty: 4, icon: "🍺", effect: "Equipped: Potions yield +1 Mana.", flavor: "It smells faintly of earwax, but it works." },
+      { name: "Mithril Vest", type: "artifact", cost: 6, target: "self", requiresTarget: false, artifactObj: { id: "amulet", name: "Mithril Vest", icon: "🧥", desc: "Gain 4 Armor" }, armor: 4, qty: 3, icon: "🧥", effect: "Equipped: Gain 4 Armor.", flavor: "Lightweight, stylish, and stops a broadsword." },
+      { name: "Bramble Cloak", type: "artifact", cost: 4, target: "self", requiresTarget: false, artifactObj: { id: "spike_armor", name: "Bramble Cloak", icon: "🌿", desc: "Reflects 1 dmg. Breaks after 2 hits.", durability: 2 }, qty: 4, icon: "🌿", effect: "Reflects 1 dmg. Breaks after 2 hits.", flavor: "Do not sit down on fine upholstery while wearing this." },
+      { name: "Abyssal Locket", type: "artifact", cost: 4, target: "self", requiresTarget: false, artifactObj: { id: "shield_of_void", name: "Abyssal Locket", icon: "🧿", desc: "Regen 1 Mana per damage taken.", duration: 2 }, qty: 4, icon: "🧿", effect: "Regen 1 Mana per damage taken. Lasts 2 turns.", flavor: "Stares back at anyone who looks at your chest." },
 
       // EVENTS
       { name: "Shot Glass", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Potions yield 1 less Mana.", qty: 3, icon: "🥃", flavor: "For when you need a quick fix, but not too much." },
       { name: "Mana Surge", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Potions yield +1 Mana!", qty: 3, icon: "🌊", flavor: "The leylines are vibrating! Or maybe it's just the caffeine." },
-      { name: "Disrupted Gravity", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Hand limit increased by 1.", qty: 3, icon: "🌌", flavor: "Why is the table floating?" }
+      { name: "Disrupted Gravity", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Hand limit increased by 1.", qty: 3, icon: "🌌", flavor: "Why is the table floating?" },
+      { name: "Cursed Tongue", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Anyone who says the word 'Mana' must manually take 1 HP damage.", qty: 2, icon: "👅", flavor: "Speak not the forbidden syllable." },
+      { name: "Shared Suffering", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Whenever a player drinks a Potion in-game, all other players must take a sip IRL.", qty: 3, icon: "🍻", flavor: "A burden shared is a liver impaired." },
+      { name: "Arcane Fatigue", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Players must sigh loudly before casting any spell, or the spell fails.", qty: 2, icon: "😮‍💨", flavor: "Magic is just so exhausting these days." },
+      { name: "Left-Handed Path", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Players must operate their phones using only their non-dominant hand.", qty: 2, icon: "🤚", flavor: "Sinister magics require sinister methods." },
+      { name: "Vow of Silence", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: Players cannot speak outside of their turns. Violators take a drink IRL.", qty: 2, icon: "🤐", flavor: "Shh. The walls are listening." },
+      { name: "Overcharge", type: "event", cost: 0, target: "none", requiresTarget: false, effect: "Until next event: When casting an Offensive spell, the caster must physically scream its name.", qty: 2, icon: "🗣️", flavor: "Subtlety is for rogues." }
     ];
 
     const WORLD_EVENTS = [
       { name: "Mana Drought", effect: "Spells cost +1 Mana to cast." },
       { name: "Wild Magic", effect: "Drawing cards is free (costs 0 Mana)." },
       { name: "Toxic Air", effect: "Healing spells have no effect." },
-      { name: "Frenzied Casting", effect: "Card exchange is free!" }
+      { name: "Frenzied Casting", effect: "Card exchange is free!" },
+      { name: "Solar Eclipse", effect: "All players must instantly turn their phone screen brightness to the minimum!" },
+      { name: "Leyline Tremors", effect: "Everyone must shift one seat to the left (IRL), taking over the new wizard and phone!" },
+      { name: "Goblin Raid", effect: "The player with the most cards in their hand must manually discard 1 card right now." },
+      { name: "Arcane Prohibition", effect: "No one is allowed to drink (IRL or in-game) until this event ends." },
+      { name: "Time Warp", effect: "Turn order reverses! Whoever went before the current player takes the next turn." },
+      { name: "Ghostly Chill", effect: "Players must shiver visibly before tapping any buttons." },
+      { name: "Polymorph Outbreak", effect: "Everyone must make an animal noise before ending their turn, or manually take 1 Damage." }
     ];
 
     const FUNNY_QUOTES = [
@@ -396,7 +472,7 @@
         { label: "1 Sip (+1 Mana)", action: () => consumePotion(1, false) },
         { label: "2 Sips (+2 Mana)", action: () => consumePotion(2, false) },
         { label: "3 Sips (+3 Mana)", action: () => consumePotion(3, false) },
-        { label: "🔥 CHUG CUP (+15 Mana & Infinite Actions) 🔥", action: () => consumePotion(15, true) }
+        { label: "🔥 ENGAGE DRUNKEN STYLE! (+15 Mana & Infinite Actions) 🔥", action: () => consumePotion(15, true) }
       ]);
     }
 
@@ -700,7 +776,7 @@
         if (state.worldEventDuration <= 0) state.worldEvent = null;
       } 
       
-      if (Math.random() < 0.10) {
+      if (Math.random() < 0.25) {
         state.worldEvent = WORLD_EVENTS[Math.floor(Math.random() * WORLD_EVENTS.length)];
         state.worldEventDuration = Math.floor(Math.random() * 3) + 1; 
         randomEventOccurred = true;
