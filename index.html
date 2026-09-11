@@ -832,7 +832,7 @@
       const randBanner = document.getElementById('random-event-display');
       if(state.worldEvent) { randBanner.innerHTML = `🌍 WORLD EVENT (${state.worldEventDuration} left): ${state.worldEvent.name} - ${state.worldEvent.effect}`; randBanner.style.display = "block"; } else randBanner.style.display = "none";
 
-      document.getElementById('wizards-overview').innerHTML = state.players.map((p, idx) => `<div class="wizard-chip ${idx === state.currentPlayerIdx ? 'active-chip' : ''} ${p.isDead ? 'dead' : ''}"><div class="chip-name">${p.name}</div><div class="chip-stats"><span style="color:#ff4d4d;">❤️ ${p.hp}</span><span style="color:var(--mana-glow);">💧 ${p.mana}</span></div></div>`).join('');
+      document.getElementById('wizards-overview').innerHTML = state.players.map((p, idx) => `<div class="wizard-chip ${idx === state.currentPlayerIdx ? 'active-chip' : ''} ${p.isDead ? 'dead' : ''}"><div class="chip-name">${p.name}</div><div class="chip-stats"><span style="color:#ff4d4d;">❤️ ${p.hp}</span>${p.armor > 0 ? `<span style="color:var(--gold-tarnished);">🛡️ ${p.armor}</span>` : ''}<span style="color:var(--mana-glow);">💧 ${p.mana}</span></div></div>`).join('');
       
       let statusStr = "";
       if (active.status && active.status.costReductionTurns > 0) statusStr = `Spells cost -${active.status.costReductionAmount} Mana (${active.status.costReductionTurns} turns)`;
