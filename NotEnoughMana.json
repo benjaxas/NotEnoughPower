@@ -1,0 +1,16 @@
+{
+  "name": "Not Enough Mana",
+  "short_name": "ManaGame",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#120c08",
+  "theme_color": "#120c08",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2320140d' stroke='%23d4af37' stroke-width='4'/><polygon points='50,15 80,75 20,75' fill='none' stroke='%2300b4d8' stroke-width='4'/><polygon points='50,85 20,25 80,25' fill='none' stroke='%23e63946' stroke-width='4'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

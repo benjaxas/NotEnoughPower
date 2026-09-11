@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0505">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Not Enough Mana - Grimoire Edition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+    :root {
+      --bg-dark: #0a0505; 
+      --blood-red: #7a0b0b; 
+      --blood-bright: #b90e0e;
+      --iron-dark: #1c1818;
+      --iron-light: #3a3232;
+      --parchment: #d6c7af;
+      --parchment-dim: #9e8f75;
+      --gold-tarnished: #a37c35;
+      --gold-bright: #d4af37;
+      --mana-blue: #0077b6;
+      --mana-glow: #00b4d8;
+      --font-title: 'Cinzel', serif;
+      --font-body: 'Lora', serif;
+    }
+    
+    * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+    
+    body { 
+      margin: 0; padding: 0; background: radial-gradient(circle at center, #1f0f0f 0%, var(--bg-dark) 100%); 
+      color: var(--parchment); font-family: var(--font-body); height: 100vh; overflow: hidden; display: flex; flex-direction: column; 
+    }
+    
+    header { 
+      background: var(--iron-dark); border-bottom: 2px solid var(--blood-red); 
+      padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; z-index: 10;
+      box-shadow: 0 4px 15px rgba(122, 11, 11, 0.4);
+    }
+    
+    .status-badge { 
+      font-size: 13px; font-weight: bold; background: #000; padding: 4px 10px; 
+      border-radius: 4px; border: 1px solid var(--iron-light); font-family: var(--font-title);
+    }
+    
+    .event-banner { 
+      background: linear-gradient(90deg, #3b0707, #600b0b, #3b0707); border-bottom: 1px solid var(--blood-bright); 
+      color: #ffcccc; padding: 6px 10px; font-size: 12px; text-align: center; font-family: var(--font-title); letter-spacing: 1px;
+    }
+    .random-event-banner { 
+      background: linear-gradient(90deg, #1d073b, #3b0b60, #1d073b); border-bottom: 1px solid #d7bde2; 
+      color: #f4ecf7; padding: 6px 10px; font-size: 12px; text-align: center; font-family: var(--font-title); display: none; 
+    }
+
+    #main-app { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    
+    /* Opponents Row */
+    .wizards-row { 
+      display: flex; gap: 10px; padding: 10px; overflow-x: auto; background: rgba(0,0,0,0.6); 
+      border-bottom: 1px solid var(--iron-light); scrollbar-width: none; 
+    }
+    .wizards-row::-webkit-scrollbar { display: none; }
+    .wizard-chip { 
+      flex: 0 0 115px; background: var(--iron-dark); border: 2px solid var(--iron-light); border-radius: 4px; 
+      padding: 8px; font-size: 12px; text-align: center; position: relative; box-shadow: inset 0 0 10px #000;
+    }
+    .wizard-chip.active-chip { border-color: var(--blood-bright); box-shadow: 0 0 15px rgba(185, 14, 14, 0.6), inset 0 0 10px #000; }
+    .wizard-chip.dead { opacity: 0.3; filter: grayscale(1); border-color: #000; }
+    .chip-name { font-family: var(--font-title); font-weight: bold; margin-bottom: 6px; color: var(--gold-tarnished); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chip-stats { display: flex; justify-content: space-around; font-size: 12px; font-weight: bold; }
+
+    /* Active Player Area */
+    .active-area { flex: 1; display: flex; flex-direction: column; padding: 10px; overflow-y: auto; }
+    
+    .player-hero { 
+      background: linear-gradient(135deg, var(--iron-dark), #150a0a); border: 2px solid var(--blood-red); 
+      border-radius: 6px; padding: 15px; margin-bottom: 10px; text-align: center; box-shadow: inset 0 0 20px #000;
+    }
+    .hero-title { font-family: var(--font-title); font-size: 22px; font-weight: 900; color: var(--blood-bright); margin-bottom: 8px; text-shadow: 0 2px 4px #000; }
+    .hero-meters { display: flex; justify-content: center; gap: 20px; font-size: 16px; font-weight: bold; margin-bottom: 12px; flex-wrap: wrap;}
+    .meter-hp { color: #ff4d4d; text-shadow: 0 0 8px rgba(255,77,77,0.6); }
+    .meter-mana { color: var(--mana-glow); text-shadow: 0 0 8px rgba(0,180,216,0.6); }
+    .meter-actions { color: var(--gold-bright); text-shadow: 0 0 8px rgba(212,175,55,0.6); }
+    
+    .action-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 6px; }
+    .btn { 
+      background: var(--iron-dark); border: 1px solid var(--gold-tarnished); color: var(--parchment); 
+      padding: 10px 14px; border-radius: 4px; font-family: var(--font-title); font-weight: bold; font-size: 12px; 
+      cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.5); transition: all 0.1s;
+    }
+    .btn:active { transform: translateY(2px); box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+    .btn:disabled { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+    .btn-potion { background: #072a3b; border-color: var(--mana-blue); color: #caf0f8; }
+    .btn-end { background: var(--blood-red); border-color: var(--blood-bright); color: #fff; }
+    .btn-transmute { background: #2d0e3b; border-color: #692a82; color: #f4ecf7; }
+    .btn-funny { background: #3b0e0e; border-color: var(--blood-bright); color: #ffcccc; font-size: 15px; padding: 14px; width: 100%; margin-top: 15px; }
+
+    /* Cards Hand Carousel */
+    .hand-header { font-family: var(--font-title); font-size: 14px; color: var(--gold-tarnished); text-transform: uppercase; margin: 4px 0 8px 0; font-weight: bold; border-bottom: 1px solid var(--iron-light); padding-bottom: 4px; }
+    .cards-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 6px 4px 20px 4px; scrollbar-width: none; }
+    .cards-scroll::-webkit-scrollbar { display: none; }
+    
+    /* Grimoire Card Styles */
+    .card { 
+      flex: 0 0 170px; height: 280px; background: #141111; color: var(--parchment); 
+      border: 2px solid var(--iron-light); border-radius: 6px; padding: 6px; display: flex; flex-direction: column; 
+      position: relative; box-shadow: 0 6px 15px rgba(0,0,0,0.8);
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    }
+    .card.offensive { border-color: var(--blood-red); box-shadow: 0 0 10px rgba(122,11,11,0.3); } 
+    .card.defensive { border-color: var(--mana-blue); box-shadow: 0 0 10px rgba(0,119,182,0.3); } 
+    .card.support { border-color: #2a9d8f; box-shadow: 0 0 10px rgba(42,157,143,0.3); } 
+    .card.artifact { border-color: #692a82; box-shadow: 0 0 10px rgba(105,42,130,0.3); } 
+    .card.event { border-color: #c1121f; border-style: dashed; }
+
+    .card-cost { 
+      position: absolute; top: -8px; right: -8px; background: #000; color: var(--mana-glow); 
+      border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; 
+      justify-content: center; font-size: 14px; font-weight: 900; border: 2px solid var(--mana-blue);
+      box-shadow: 0 0 8px var(--mana-blue); z-index: 2; font-family: var(--font-title);
+    }
+    
+    .card-title { font-family: var(--font-title); font-size: 13px; font-weight: bold; line-height: 1.1; color: var(--gold-bright); text-align: center; margin-bottom: 2px; margin-top: 4px; padding-right: 15px;}
+    .card-incantation { font-size: 10px; font-style: italic; color: #888; text-align: center; margin-bottom: 6px; border-bottom: 1px solid var(--iron-light); padding-bottom: 4px; }
+    
+    .card-illustration {
+        background: #000; border: 1px solid var(--iron-light); border-radius: 4px; 
+        height: 50px; display: flex; align-items: center; justify-content: center;
+        font-size: 28px; margin-bottom: 6px; box-shadow: inset 0 0 15px rgba(255,255,255,0.05);
+    }
+
+    .card-type-tag { font-family: var(--font-title); font-size: 9px; font-weight: bold; text-transform: uppercase; color: var(--gold-tarnished); text-align: center; margin-bottom: 4px;}
+    
+    .card-content-area { flex: 1; overflow-y: auto; scrollbar-width: none; margin-bottom: 6px; }
+    .card-content-area::-webkit-scrollbar { display: none; }
+    
+    .card-body { font-size: 12px; line-height: 1.3; margin-bottom: 6px; font-weight: bold; }
+    .card-flavor { font-size: 10px; font-style: italic; color: var(--parchment-dim); border-top: 1px dotted var(--iron-light); padding-top: 4px; }
+    
+    .card-actions { display: flex; gap: 4px; margin-top: auto; }
+    .card-btn { flex: 1; padding: 6px 0; font-size: 10px; font-weight: bold; border-radius: 2px; border: 1px solid var(--iron-light); cursor: pointer; font-family: var(--font-title); text-transform: uppercase;}
+    .btn-cast { background: #1a2f1c; color: #d8f3dc; } 
+    .btn-discard { background: #2b1111; color: #ffcccc; }
+
+    /* Modal / Popups */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(3px); }
+    .modal-box { background: var(--bg-dark); border: 2px solid var(--gold-tarnished); border-radius: 6px; padding: 20px; width: 100%; max-width: 340px; text-align: center; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(163,124,53,0.2); }
+    .modal-title { font-family: var(--font-title); font-size: 20px; color: var(--blood-bright); margin-bottom: 12px; font-weight: 900; flex-shrink: 0; text-shadow: 0 2px 4px #000; }
+    .modal-list { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; overflow-y: auto; padding: 2px; }
+    .multi-select-item { display: flex; justify-content: space-between; align-items: center; background: var(--iron-dark); padding: 10px 14px; border-radius: 4px; border: 1px solid var(--iron-light); color: var(--parchment); font-size: 13px; cursor: pointer; text-align: left; font-family: var(--font-body); }
+    .multi-select-item.selected { background: #3b0e0e; border-color: var(--blood-bright); box-shadow: inset 0 0 10px #000;}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="status-badge" id="deck-counter">DECK: 0</div>
+    <div class="status-badge" style="color:var(--blood-bright); font-size: 16px;">GRIMOIRE</div>
+    <div class="status-badge" id="round-counter">TURN: 1</div>
+  </header>
+
+  <div class="event-banner" id="event-display">Global Card Event: None Active</div>
+  <div class="random-event-banner" id="random-event-display">World Event: None</div>
+
+  <div id="main-app">
+    <div class="wizards-row" id="wizards-overview"></div>
+
+    <div class="active-area">
+      <div class="player-hero">
+        <div class="hero-title" id="active-player-name">Wizard 1</div>
+        <div class="hero-meters">
+          <span class="meter-hp" id="active-hp">❤️ 10</span>
+          <span class="meter-mana" id="active-mana">💧 3</span>
+          <span class="meter-actions" id="active-actions">⚡ 4 Actions</span>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-potion" onclick="potionMenu()">🧪 Drink...</button>
+          <button class="btn" onclick="drawCardAction()">🃏 Draw (-1)</button>
+          <button class="btn btn-transmute" onclick="transmuteAction()">♻️ Burn 3 (+1)</button>
+          <button class="btn" onclick="exchangeCardPrompt()">🔄 Swap</button>
+          <button class="btn btn-end" onclick="finishTurn()">⏭️ End Turn</button>
+        </div>
+      </div>
+
+      <div class="hand-header">Spell Hand (<span id="hand-count">0</span>/<span id="hand-limit">5</span>)</div>
+      <div class="cards-scroll" id="active-hand"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal" style="display:none;"><div class="modal-box" id="modal-content"></div></div>
+
+  <script>
+    // --- AUDIO ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination); const now = audioCtx.currentTime;
+      if (type === 'potion') { osc.type = 'sine'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(700, now + 0.15); gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.15); osc.start(now); osc.stop(now + 0.15); } 
+      else if (type === 'spell') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.25); gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.25); osc.start(now); osc.stop(now + 0.25); } 
+      else if (type === 'pass') { osc.type = 'triangle'; osc.frequency.setValueAtTime(440, now); osc.frequency.setValueAtTime(880, now + 0.1); gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.3); osc.start(now); osc.stop(now + 0.3); }
+    }
+
+    // --- MASSIVE GRIMOIRE CARD POOL ---
+    const CARD_TEMPLATES = [
+      // Offensive Spells
+      { name: "Electric Explosion", incantation: "Magnum Crepitus Electrica", type: "offensive", cost: 2, effect: "All other wizards lose 2 HP.", target: "all_enemies", requiresTarget: false, dmg: 2, qty: 8, icon: "🌩️", flavor: "First cast by the Mad Mage of Galar. Warning: may singe eyebrows." },
+      { name: "Fireball", incantation: "Globus Ignis", type: "offensive", cost: 2, effect: "Target wizard loses 2 HP.", target: "single", requiresTarget: true, dmg: 2, qty: 10, icon: "☄️", flavor: "A classic for a reason. Leaves a distinct smell of burnt toast and regret." },
+      { name: "Frostbite", incantation: "Glacies Mordax", type: "offensive", cost: 1, effect: "Target loses 1 HP and 1 Mana.", target: "single", requiresTarget: true, dmg: 1, drainMana: 1, qty: 8, icon: "❄️", flavor: "Originates from the frozen wastes of Blàvod[cite: 1]. Side effects include chattering teeth." },
+      { name: "Chain Lightning", type: "offensive", cost: 3, effect: "Target loses 2 HP; the next wizard in line loses 1 HP.", target: "chain", requiresTarget: true, dmg: 2, qty: 6, icon: "⚡", flavor: "Don't hold hands while casting. Seriously." },
+      { name: "Soul Burn", type: "offensive", cost: 2, effect: "Target loses 3 Mana.", target: "single", requiresTarget: true, drainMana: 3, qty: 6, icon: "🔥", flavor: "Tastes like ash. Burns like the deepest pits of the abyss." },
+      { name: "Vampiric Touch", type: "offensive", cost: 2, effect: "Deal 2 HP damage and heal yourself for 1 HP.", target: "single", requiresTarget: true, dmg: 2, heal: 1, qty: 6, icon: "🩸", flavor: "A messy affair. Wipe your mouth afterwards." },
+      { name: "Oblivion Ray", type: "offensive", cost: 3, effect: "Target takes 3 Damage.", target: "single", requiresTarget: true, dmg: 3, qty: 6, icon: "👁️‍🗨️", flavor: "Erases the target, the target's shadow, and occasionally the caster's memory." },
+      { name: "Mind Shatter", type: "offensive", cost: 2, effect: "Force target wizard to discard 1 random card.", target: "single", requiresTarget: true, forceDiscard: 1, qty: 5, icon: "🧠", flavor: "Discovered by a scholar who forgot how to tie his shoes immediately after." },
+      { name: "Meteor Strike", type: "offensive", cost: 4, effect: "Target takes 4 Damage.", target: "single", requiresTarget: true, dmg: 4, qty: 4, icon: "☄️", flavor: "Look up. Pray." },
+      { name: "Poison Cloud", type: "offensive", cost: 3, effect: "All enemies lose 1 HP and 1 Mana.", target: "all_enemies", requiresTarget: false, dmg: 1, drainMana: 1, qty: 4, icon: "💨", flavor: "It was supposed to be a perfume... - Albert the Pure[cite: 1]." },
+      { name: "Combined Sacrifice", type: "offensive", cost: 2, effect: "Lose 1 HP to deal 3 Damage to target.", target: "single", requiresTarget: true, dmg: 3, selfDamage: 1, qty: 6, icon: "🗡️", flavor: "Blood is just another type of mana if you squeeze hard enough." },
+      { name: "Reverse Intoxication", type: "offensive", cost: 0, effect: "Force target to take a drink IRL! You gain 1 Mana.", target: "single", requiresTarget: true, gainMana: 1, qty: 5, icon: "🤢", flavor: "I drink, you suffer. A flawless exchange." },
+      { name: "Arcane Nova", type: "offensive", cost: 2, effect: "All enemies lose 1 HP. You gain 1 Armor.", target: "all_enemies", requiresTarget: false, dmg: 1, armor: 1, qty: 4, icon: "💥", flavor: "A burst of raw energy that pushes away the unworthy." },
+      
+      // Defensive Spells
+      { name: "Magic Shield", incantation: "Lux Clypeus", type: "defensive", cost: 2, effect: "Gain 3 Armor (absorbs next 3 damage).", target: "self", requiresTarget: false, armor: 3, qty: 10, icon: "🛡️", flavor: "Standard issue for the Potion Institute's[cite: 1] dueling club." },
+      { name: "Reflect", type: "defensive", cost: 3, effect: "Gain 1 Armor. Target enemy takes 1 Damage.", target: "single", requiresTarget: true, armor: 1, dmg: 1, qty: 6, icon: "🪞", flavor: "'No, you.' - Archchancellor Albert's[cite: 1] famous counter-argument." },
+      { name: "Crystal Aegis", type: "defensive", cost: 3, effect: "Gain 4 Armor.", target: "self", requiresTarget: false, armor: 4, qty: 4, icon: "💎", flavor: "Heavy, uncomfortable, but better than being incinerated." },
+      { name: "Mirror Image", type: "defensive", cost: 0, effect: "Gain 1 Armor and 1 Mana.", target: "self", requiresTarget: false, armor: 1, gainMana: 1, qty: 6, icon: "👥", flavor: "Who is the real me? Does it even matter?" },
+
+      // Support Spells
+      { name: "Regrowth", incantation: "Magia Salutis", type: "support", cost: 3, effect: "Restore 4 HP to yourself.", target: "self", requiresTarget: false, heal: 4, qty: 6, icon: "🌱", flavor: "Tastes like extreme broccoli. Fixes broken bones in seconds." },
+      { name: "Mana Siphon", type: "support", cost: 1, effect: "Steal 2 Mana from target.", target: "single", requiresTarget: true, stealMana: 2, qty: 8, icon: "🦇", flavor: "Thievery? No, it's 'aggressive borrowing'." },
+      { name: "Clarity", type: "support", cost: 1, effect: "Draw 2 cards.", target: "self", requiresTarget: false, drawCards: 2, qty: 8, icon: "👁️", flavor: "Ah, I see the matrix of the universe... and my keys!" },
+      { name: "Dark Bargain", type: "support", cost: 0, effect: "Lose 2 HP to instantly gain 4 Mana.", target: "self", requiresTarget: false, selfDamage: 2, gainMana: 4, qty: 5, icon: "📜", flavor: "Sign on the dotted line. In blood, preferably." },
+      { name: "Minor Transmutation", type: "support", cost: 0, effect: "Instantly gain 1 Mana.", target: "self", requiresTarget: false, gainMana: 1, qty: 5, icon: "✨", flavor: "Lead into gold? No, lint into mana." },
+      { name: "Tome Swap", type: "support", cost: 0, effect: "Swap a card of your choice for a random card from target's hand.", target: "single", requiresTarget: true, tomeSwap: true, qty: 5, icon: "🔄", flavor: "I'll trade you this ancient curse for that... shiny rock?" },
+      { name: "Stolen Knowledge", type: "support", cost: 0, effect: "Steal a random card from target's hand.", target: "single", requiresTarget: true, stealCard: true, qty: 5, icon: "🧠", flavor: "Knowledge is power. Your knowledge is now my power." },
+
+      // Artifacts
+      { name: "Spellbook", type: "artifact", cost: 4, effect: "Equipped: Hand limit +1.", target: "self", requiresTarget: false, artifact: "spellbook", qty: 4, icon: "📖", flavor: "Bound in questionable leather. Do not read aloud." },
+      { name: "Potion Bandolier", type: "artifact", cost: 4, effect: "Equipped: Hand limit +2.", target: "self", requiresTarget: false, artifact: "bandolier", qty: 2, icon: "🎒", flavor: "Because holding bottles with your hands is for peasants." },
+      { name: "Channelling Ring", type: "artifact", cost: 3, effect: "Equipped: Potions yield +1 Mana.", target: "self", requiresTarget: false, artifact: "ring", qty: 4, icon: "💍", flavor: "Glows ominously when you are hungover." },
+      { name: "Amulet of Fortitude", type: "artifact", cost: 5, effect: "Equipped: Gain 2 Armor.", target: "self", requiresTarget: false, artifact: "amulet", armor: 2, qty: 3, icon: "🧿", flavor: "It's literally just a really thick iron plate on a chain." },
+
+      // Events
+      { name: "Shot Glass", type: "event", cost: 0, effect: "Until next event: Potions yield 1 less Mana.", requiresTarget: false, qty: 3, icon: "🥃", flavor: "For when you need a quick fix, but not too much." },
+      { name: "Mana Surge", type: "event", cost: 0, effect: "Until next event: Potions yield +1 Mana!", requiresTarget: false, qty: 3, icon: "🌊", flavor: "The leylines are vibrating! Or maybe it's just the caffeine." },
+      { name: "Disrupted Gravity", type: "event", cost: 0, effect: "Until next event: Hand limit increased by 1.", requiresTarget: false, qty: 3, icon: "🌌", flavor: "Why is the table floating?" }
+    ];
+
+    const WORLD_EVENTS = [
+      { name: "Mana Drought", effect: "Spells cost +1 Mana to cast." },
+      { name: "Wild Magic", effect: "Drawing cards is free (costs 0 Mana)." },
+      { name: "Toxic Air", effect: "Healing spells have no effect." },
+      { name: "Frenzied Casting", effect: "Card exchange is free!" }
+    ];
+
+    const FUNNY_QUOTES = [
+      "Damn the chances!", "I'll drink to that.", "Curse this wizardry!", 
+      "By Albert's beard!", "Just my luck...", "I need another potion for this.",
+      "Are you kidding me?", "Classic magic.", "Welp, here we go.", "I blame Blàvod."
+    ];
+
+    // --- GAME STATE ---
+    let state = {
+      players: [], currentPlayerIdx: 0, turnNumber: 1,
+      drawPile: [], discardPile: [], activeEvent: null, 
+      worldEvent: null, worldEventDuration: 0,
+      actionsLeft: 4, unlimitedActions: false, exchangesThisTurn: 0
+    };
+
+    // --- SAVING & LOADING ---
+    function saveGame() { localStorage.setItem('nem_save', JSON.stringify(state)); }
+    function loadGame() {
+      const saved = localStorage.getItem('nem_save');
+      if (saved) { state = JSON.parse(saved); renderAll(); return true; }
+      return false;
+    }
+
+    function initSetupModal() {
+      const modal = document.getElementById('modal'); const box = document.getElementById('modal-content');
+      modal.style.display = 'flex';
+      const hasSave = !!localStorage.getItem('nem_save');
+      
+      box.innerHTML = `
+        <div class="modal-title">NOT ENOUGH MANA</div>
+        ${hasSave ? `<button class="btn btn-potion" style="margin-bottom:15px; width:100%; font-size:14px; padding: 15px;" onclick="document.getElementById('modal').style.display='none'; loadGame();">▶ RESUME GRIMOIRE</button><hr style="border-color:var(--blood-red); width:100%; margin-bottom:15px;">` : ''}
+        <p style="font-size:13px; color:var(--parchment); margin:0; font-family:var(--font-title);">Initiate Blood Ritual (Choose Players):</p>
+        <div style="display:flex; justify-content:center; gap:8px; margin:15px 0;">
+          ${[3,4,5,6].map(n => `<button class="btn" style="padding:12px 18px; font-size:16px;" onclick="startGame(${n})">${n}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    function startGame(numPlayers) {
+      document.getElementById('modal').style.display = 'none'; localStorage.removeItem('nem_save');
+      state = { players: [], currentPlayerIdx: 0, turnNumber: 1, drawPile: [], discardPile: [], activeEvent: null, worldEvent: null, worldEventDuration: 0, actionsLeft: 4, unlimitedActions: false, exchangesThisTurn: 0 };
+      const defaultNames = ["Albert", "Blàvod", "Ignis", "Morgana", "Cyrus", "Kaelen"];
+      for (let i = 0; i < numPlayers; i++) state.players.push({ id: i, name: defaultNames[i], hp: 10, mana: 3, armor: 0, hand: [], artifacts: [], isDead: false });
+      buildDeck();
+      
+      state.players.forEach(p => { 
+        while (p.hand.length < 5) { 
+          let c = drawOneCard(p); 
+          if (c.type === 'event') state.discardPile.push(c); 
+          else p.hand.push(c); 
+        } 
+      });
+      renderAll();
+    }
+
+    function buildDeck() {
+      state.drawPile = [];
+      CARD_TEMPLATES.forEach(c => {
+        for(let i = 0; i < c.qty; i++) {
+          state.drawPile.push(Object.assign({}, c, { uid: Math.random() }));
+        }
+      });
+      for (let i = state.drawPile.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [state.drawPile[i], state.drawPile[j]] = [state.drawPile[j], state.drawPile[i]];
+      }
+    }
+    
+    function drawOneCard(playerForFilter = null) {
+      if (state.drawPile.length === 0) { 
+        if (state.discardPile.length === 0) return null; 
+        state.drawPile = [...state.discardPile]; 
+        state.discardPile = []; 
+        state.drawPile.sort(()=>Math.random()-0.5); 
+      }
+      let card = state.drawPile.pop();
+
+      if (playerForFilter && card.type === 'artifact' && playerForFilter.artifacts.includes(card.artifact)) {
+        state.discardPile.push(card);
+        return drawOneCard(playerForFilter);
+      }
+
+      if (playerForFilter && card.type === 'event') {
+        state.activeEvent = card;
+        state.discardPile.push(card);
+        showChoiceModal("📜 NEW RULE (CARD EVENT)!", `<b style="color:var(--blood-bright); font-size:16px;">${card.name}</b><br><br>${card.effect}`, [{
+          label: "Understood!", action: () => {
+            renderAll();
+          }
+        }]);
+        return drawOneCard(playerForFilter);
+      }
+
+      return card;
+    }
+
+    function getPlayerHandLimit(player) {
+      let limit = 5;
+      if (state.activeEvent && state.activeEvent.name === "Disrupted Gravity") limit += 1;
+      limit += player.artifacts.filter(a => a === "spellbook").length * 1;
+      limit += (player.artifacts.filter(a => a === "bandolier").length * 2);
+      return limit;
+    }
+
+    // --- ACTION SYSTEM ---
+    function useAction() {
+      if (state.unlimitedActions) return true;
+      if (state.actionsLeft <= 0) { alert("Your magic is exhausted! End your turn."); return false; }
+      state.actionsLeft--; return true;
+    }
+
+    // --- MECHANICS ---
+    function potionMenu() {
+      showChoiceModal("Consume Potion", "Select dosage (Costs 1 Action):", [
+        { label: "1 Sip (+1 Mana)", action: () => consumePotion(1, false) },
+        { label: "2 Sips (+2 Mana)", action: () => consumePotion(2, false) },
+        { label: "3 Sips (+3 Mana)", action: () => consumePotion(3, false) },
+        { label: "🔥 CHUG CUP (+15 Mana & Infinite Actions) 🔥", action: () => consumePotion(15, true) }
+      ]);
+    }
+
+    function consumePotion(baseAmount, isChug) {
+      if (!useAction()) return;
+      const p = state.players[state.currentPlayerIdx];
+      let finalAmount = parseInt(baseAmount);
+      
+      if (state.activeEvent && state.activeEvent.name === "Shot Glass") finalAmount = Math.max(0, finalAmount - 1);
+      if (state.activeEvent && state.activeEvent.name === "Mana Surge") finalAmount += 1;
+      if (p.artifacts.includes("ring")) finalAmount += 1;
+      
+      p.mana += finalAmount;
+      if (isChug) state.unlimitedActions = true;
+      playSfx('potion'); renderAll();
+    }
+
+    function drawCardAction() {
+      const p = state.players[state.currentPlayerIdx];
+      let cost = (state.worldEvent && state.worldEvent.name === "Wild Magic") ? 0 : 1;
+      if (p.mana < cost) return alert(`You need ${cost} Mana to draw!`);
+      if (p.hand.length >= getPlayerHandLimit(p)) return alert("Your Grimoire is full!");
+      if (!useAction()) return;
+      p.mana -= cost;
+      
+      let card = drawOneCard(p);
+      if(card) { p.hand.push(card); }
+      renderAll();
+    }
+
+    function transmuteAction() {
+      const p = state.players[state.currentPlayerIdx];
+      if (p.hand.length < 3) return alert("You need 3 cards to burn in the ritual!");
+      
+      let selectedIndices = [];
+      const modal = document.getElementById('modal'); const box = document.getElementById('modal-content');
+      modal.style.display = 'flex';
+
+      function renderTransmuteModal() {
+        box.innerHTML = `
+          <div class="modal-title">Ritual Burn</div><p style="font-size:12px; color:var(--parchment-dim);">Sacrifice 3 cards to gain 1 Mana. Costs 1 Action.</p>
+          <div class="modal-list" style="max-height: 220px;">
+            ${p.hand.map((c, i) => `<div class="multi-select-item ${selectedIndices.includes(i) ? 'selected' : ''}" onclick="toggleSelect(${i})"><span>${c.name}</span>${selectedIndices.includes(i) ? '☑️' : '☐'}</div>`).join('')}
+          </div>
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button class="btn btn-end" style="flex:1;" onclick="document.getElementById('modal').style.display='none';">Cancel</button>
+            <button class="btn btn-transmute" style="flex:1;" ${selectedIndices.length !== 3 ? 'disabled' : ''} onclick="confirmTransmute()">Ignite Cards</button>
+          </div>
+        `;
+      }
+      window.toggleSelect = function(idx) { if (selectedIndices.includes(idx)) { selectedIndices = selectedIndices.filter(i => i !== idx); } else if (selectedIndices.length < 3) { selectedIndices.push(idx); } renderTransmuteModal(); }
+      window.confirmTransmute = function() {
+        if (selectedIndices.length !== 3) return;
+        if (!useAction()) { document.getElementById('modal').style.display = 'none'; return; }
+        selectedIndices.sort((a,b) => b - a).forEach(idx => { state.discardPile.push(p.hand.splice(idx, 1)[0]); });
+        p.mana += 1; document.getElementById('modal').style.display = 'none'; renderAll();
+      }
+      renderTransmuteModal();
+    }
+
+    function exchangeCardPrompt() {
+      const p = state.players[state.currentPlayerIdx];
+      let cost = state.exchangesThisTurn + 1;
+      if (state.worldEvent && state.worldEvent.name === "Frenzied Casting") cost = 0;
+
+      if (p.mana < cost) return alert(`Exchanging requires ${cost} Mana!`);
+      if (p.hand.length === 0) return alert("No cards to exchange!");
+      showChoiceModal("Swap Magic", `Cost: ${cost} Mana & 1 Action`, p.hand.map((c, idx) => ({
+        label: `${c.name}`, action: () => {
+          if (!useAction()) return;
+          p.mana -= cost; state.exchangesThisTurn++;
+          state.discardPile.push(p.hand.splice(idx, 1)[0]);
+          let card = drawOneCard(p);
+          if(card) { p.hand.push(card); }
+          renderAll();
+        }
+      })));
+    }
+
+    function castCard(cardIdx) {
+      const p = state.players[state.currentPlayerIdx]; const card = p.hand[cardIdx];
+      let cost = card.cost + (state.worldEvent && state.worldEvent.name === "Mana Drought" ? 1 : 0);
+      if (p.mana < cost) return alert(`Not enough Mana! (Cost: ${cost})`);
+      if (card.heal && state.worldEvent && state.worldEvent.name === "Toxic Air") return alert("Healing is disabled due to Toxic Air!");
+      
+      if (card.requiresTarget) {
+        const targets = state.players.map((target, idx) => ({ target, idx })).filter(t => !t.target.isDead && t.idx !== state.currentPlayerIdx);
+        showChoiceModal(`Cast ${card.name}`, `Target (Costs 1 Action):`, targets.map(t => ({ label: `${t.target.name} (❤️ ${t.target.hp})`, action: () => executeCardEffect(cardIdx, t.idx, cost) })));
+      } else {
+        if(confirm(`Unleash ${card.name} for ${cost} Mana and 1 Action?`)) executeCardEffect(cardIdx, null, cost);
+      }
+    }
+
+    function executeCardEffect(cardIdx, targetIdx, finalCost) {
+      if (!useAction()) return;
+      const p = state.players[state.currentPlayerIdx]; const card = p.hand.splice(cardIdx, 1)[0];
+      p.mana -= finalCost; playSfx('spell');
+      if (card.type === 'artifact') { p.artifacts.push(card.artifact); if(card.armor) p.armor += card.armor; } else state.discardPile.push(card);
+
+      // Single Target Effects
+      if (targetIdx !== null) {
+        const victim = state.players[targetIdx];
+        if (card.dmg) applyDamage(victim, card.dmg);
+        if (card.drainMana) victim.mana = Math.max(0, victim.mana - card.drainMana);
+        if (card.stealMana) { const stolen = Math.min(victim.mana, card.stealMana); victim.mana -= stolen; p.mana += stolen; }
+        if (card.forceDiscard && victim.hand.length > 0) { state.discardPile.push(victim.hand.splice(Math.floor(Math.random() * victim.hand.length), 1)[0]); }
+        if (card.stealCard && victim.hand.length > 0) { p.hand.push(victim.hand.splice(Math.floor(Math.random() * victim.hand.length), 1)[0]); }
+      }
+
+      // AoE Effects
+      if (card.target === 'all_enemies' || card.target === 'all') { 
+        state.players.forEach((t, i) => { 
+          if (i !== state.currentPlayerIdx && !t.isDead) { 
+            if(card.dmg) applyDamage(t, card.dmg); 
+            if(card.heal) t.hp = Math.min(10, t.hp + card.heal); 
+            if(card.drainMana) t.mana = Math.max(0, t.mana - card.drainMana);
+            if(card.forceDiscard && t.hand.length > 0) { state.discardPile.push(t.hand.splice(Math.floor(Math.random() * t.hand.length), 1)[0]); }
+          } 
+        }); 
+      }
+      
+      // Chain Lightning Logic
+      if (card.target === 'chain' && targetIdx !== null) {
+        let bounceIdx = (targetIdx + 1) % state.players.length;
+        while(bounceIdx !== targetIdx) {
+          if (!state.players[bounceIdx].isDead && bounceIdx !== state.currentPlayerIdx) {
+            applyDamage(state.players[bounceIdx], 1); break;
+          }
+          bounceIdx = (bounceIdx + 1) % state.players.length;
+        }
+      }
+
+      // Self Effects
+      if (card.heal) p.hp = Math.min(10, p.hp + card.heal);
+      if (card.selfDamage) applyDamage(p, card.selfDamage);
+      if (card.gainMana) p.mana += card.gainMana; 
+      if (card.armor && card.type !== 'artifact') p.armor += card.armor;
+      if (card.drawCards) { 
+        let drawn = 0;
+        while (drawn < card.drawCards && p.hand.length < getPlayerHandLimit(p)) { 
+          let c = drawOneCard(p); 
+          if(c) { p.hand.push(c); drawn++; }
+          else { break; }
+        } 
+      }
+
+      // Special Logic for Tome Swap
+      if (card.tomeSwap && targetIdx !== null) {
+        const victim = state.players[targetIdx];
+        if (victim.hand.length === 0 || p.hand.length === 0) {
+            alert("Not enough magic on both sides to swap!");
+            checkEliminations(); renderAll();
+            return;
+        }
+        showChoiceModal("Tome Swap", "Select a card from your hand to give to " + victim.name + ":", p.hand.map((c, i) => ({
+            label: c.name,
+            action: () => {
+                const stolen = victim.hand.splice(Math.floor(Math.random() * victim.hand.length), 1)[0];
+                const given = p.hand.splice(i, 1)[0];
+                p.hand.push(stolen);
+                victim.hand.push(given);
+                checkEliminations(); renderAll();
+            }
+        })));
+        checkEliminations(); renderAll();
+        return; 
+      }
+
+      checkEliminations(); renderAll();
+    }
+
+    function discardCard(cardIdx) {
+      const p = state.players[state.currentPlayerIdx];
+      if (state.unlimitedActions) { p.mana += 1; } else { state.actionsLeft++; }
+      state.discardPile.push(p.hand.splice(cardIdx, 1)[0]); 
+      renderAll();
+    }
+
+    function applyDamage(player, amount) {
+      if (player.armor > 0) { const absorbed = Math.min(player.armor, amount); player.armor -= absorbed; amount -= absorbed; }
+      player.hp = Math.max(0, player.hp - amount);
+    }
+
+    function checkEliminations() { state.players.forEach(p => { if (p.hp <= 0) p.isDead = true; }); const alive = state.players.filter(p => !p.isDead); if (alive.length === 1) showVictoryModal(alive[0]); }
+
+    // --- DEDICATED WORLD EVENT MODAL ---
+    function showWorldEventModal(eventObj, duration, nextPlayerName) {
+      const modal = document.getElementById('modal');
+      const box = document.getElementById('modal-content');
+      modal.style.display = 'flex';
+      
+      const randomQuote = FUNNY_QUOTES[Math.floor(Math.random() * FUNNY_QUOTES.length)];
+      
+      box.innerHTML = `
+        <div class="modal-title" style="color: #d7bde2; font-size: 24px;">🌍 WORLD EVENT!</div>
+        <h3 style="color:var(--gold-bright); margin: 15px 0; font-family:var(--font-title);">${eventObj.name}</h3>
+        <p style="font-size:15px; color:var(--parchment); line-height:1.4;">${eventObj.effect}</p>
+        <p style="font-size:13px; color:var(--blood-bright); font-weight:bold; margin-bottom:20px;">Lasts for ${duration} round(s).</p>
+        <div class="modal-list">
+          <button class="btn btn-funny" id="we-btn">${randomQuote}</button>
+        </div>
+      `;
+      
+      document.getElementById('we-btn').onclick = () => {
+        showPassScreen(nextPlayerName);
+      };
+    }
+
+    // --- TURN ENDING ---
+    function finishTurn() {
+      playSfx('pass'); state.exchangesThisTurn = 0; state.actionsLeft = 4; state.unlimitedActions = false;
+      let roundEnded = false;
+      
+      do {
+        state.currentPlayerIdx = (state.currentPlayerIdx + 1) % state.players.length;
+        if (state.currentPlayerIdx === 0) { state.turnNumber++; roundEnded = true; }
+      } while (state.players[state.currentPlayerIdx].isDead);
+
+      const nextPlayer = state.players[state.currentPlayerIdx];
+
+      nextPlayer.mana += 1; 
+      
+      let cardsDrawn = 0;
+      const limit = getPlayerHandLimit(nextPlayer);
+      while (nextPlayer.hand.length < limit && cardsDrawn < 2) {
+        let c = drawOneCard(nextPlayer); 
+        if (!c) break;
+        nextPlayer.hand.push(c); 
+        cardsDrawn++;
+      }
+
+      let randomEventOccurred = false;
+
+      if (state.worldEventDuration > 0 && roundEnded) {
+        state.worldEventDuration--;
+        if (state.worldEventDuration <= 0) state.worldEvent = null;
+      } 
+      
+      if (Math.random() < 0.10) {
+        state.worldEvent = WORLD_EVENTS[Math.floor(Math.random() * WORLD_EVENTS.length)];
+        state.worldEventDuration = Math.floor(Math.random() * 3) + 1; // 1 to 3 turns
+        randomEventOccurred = true;
+      }
+
+      saveGame();
+
+      if (randomEventOccurred) {
+        showWorldEventModal(state.worldEvent, state.worldEventDuration, nextPlayer.name);
+      } else {
+        showPassScreen(nextPlayer.name);
+      }
+    }
+
+    // --- UI HELPERS ---
+    function showPassScreen(name) {
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('modal-content').innerHTML = `
+        <div class="modal-title">Pass Grimoire</div>
+        <h2 style="color:var(--gold-bright); font-family:var(--font-title); font-size:26px;">${name}</h2>
+        <button class="btn" style="padding:14px 20px; margin-top:20px; font-size:16px;" onclick="document.getElementById('modal').style.display='none'; renderAll();">Break Seal (Ready)</button>
+      `;
+    }
+
+    function showChoiceModal(title, text, options) {
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('modal-content').innerHTML = `
+        <div class="modal-title">${title}</div>
+        <p style="font-size:14px; color:var(--parchment); margin-bottom:15px;">${text}</p>
+        <div class="modal-list">${options.map((opt, i) => `<button class="btn" id="opt-btn-${i}">${opt.label}</button>`).join('')}</div>
+        ${title.includes('WORLD EVENT') || title.includes('NEW RULE') ? '' : `<button class="btn btn-end" style="margin-top:10px;" onclick="document.getElementById('modal').style.display='none';">Cancel</button>`}
+      `;
+      options.forEach((opt, i) => { document.getElementById(`opt-btn-${i}`).onclick = () => { document.getElementById('modal').style.display = 'none'; opt.action(); }; });
+    }
+
+    function showVictoryModal(winner) {
+      document.getElementById('modal').style.display = 'flex'; localStorage.removeItem('nem_save');
+      document.getElementById('modal-content').innerHTML = `
+        <div class="modal-title" style="font-size:28px;">VICTORY!</div>
+        <h2 style="color:var(--gold-bright); font-family:var(--font-title);">${winner.name}</h2>
+        <p style="color:var(--parchment-dim); font-style:italic;">Has survived the arcane slaughter.</p>
+        <button class="btn" style="margin-top:20px; padding:15px; font-size:16px;" onclick="initSetupModal()">Play Again</button>
+      `;
+    }
+
+    function renderAll() {
+      const active = state.players[state.currentPlayerIdx]; const limit = getPlayerHandLimit(active);
+      document.getElementById('deck-counter').innerText = `DECK: ${state.drawPile.length}`;
+      document.getElementById('round-counter').innerText = `TURN: ${state.turnNumber}`;
+
+      const evtBanner = document.getElementById('event-display');
+      if(state.activeEvent) { evtBanner.innerHTML = `<b>ACTIVE RULE:</b> ${state.activeEvent.name} - ${state.activeEvent.effect}`; evtBanner.style.display = "block"; } else evtBanner.style.display = "none";
+      
+      const randBanner = document.getElementById('random-event-display');
+      if(state.worldEvent) { randBanner.innerHTML = `🌍 WORLD EVENT (${state.worldEventDuration} left): ${state.worldEvent.name} - ${state.worldEvent.effect}`; randBanner.style.display = "block"; } else randBanner.style.display = "none";
+
+      document.getElementById('wizards-overview').innerHTML = state.players.map((p, idx) => `<div class="wizard-chip ${idx === state.currentPlayerIdx ? 'active-chip' : ''} ${p.isDead ? 'dead' : ''}"><div class="chip-name">${p.name}</div><div class="chip-stats"><span style="color:#ff4d4d;">❤️ ${p.hp}</span><span style="color:var(--mana-glow);">💧 ${p.mana}</span></div></div>`).join('');
+      document.getElementById('active-player-name').innerText = active.name;
+      document.getElementById('active-hp').innerText = `❤️ ${active.hp} HP ${active.armor > 0 ? `(+${active.armor} Armor)` : ''}`;
+      document.getElementById('active-mana').innerText = `💧 ${active.mana} Mana`;
+      
+      const actDisplay = document.getElementById('active-actions');
+      if(state.unlimitedActions) actDisplay.innerText = "⚡ INFINITE ACTIONS";
+      else actDisplay.innerText = `⚡ ${state.actionsLeft} Action${state.actionsLeft !== 1 ? 's' : ''}`;
+      
+      document.getElementById('hand-count').innerText = active.hand.length; document.getElementById('hand-limit').innerText = limit;
+      
+      const discardBtnText = state.unlimitedActions ? "Discard (+1 💧)" : "Discard (+1 ⚡)";
+
+      document.getElementById('active-hand').innerHTML = active.hand.map((c, idx) => `
+        <div class="card ${c.type}">
+          <div class="card-cost">${c.cost}</div>
+          <div class="card-title">${c.name}</div>
+          ${c.incantation ? `<div class="card-incantation">${c.incantation}</div>` : ''}
+          <div class="card-illustration">${c.icon || '🔮'}</div>
+          <div class="card-type-tag">${c.type}</div>
+          <div class="card-content-area">
+            <div class="card-body">${c.effect}</div>
+            ${c.flavor ? `<div class="card-flavor">"${c.flavor}"</div>` : ''}
+          </div>
+          <div class="card-actions">
+            <button class="card-btn btn-cast" onclick="castCard(${idx})">Cast</button>
+            <button class="card-btn btn-discard" onclick="discardCard(${idx})">${discardBtnText}</button>
+          </div>
+        </div>
+      `).join('');
+      
+      saveGame(); 
+    }
+
+    initSetupModal();
+  </script>
+</body>
+</html>
