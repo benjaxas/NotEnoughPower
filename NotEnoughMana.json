@@ -1,6 +1,6 @@
 {
   "name": "Not Enough Mana",
-  "short_name": "ManaGame",
+  "short_name": "Not Enough Mana",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "portrait",
