@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mana-v1';
+const CACHE_NAME = 'mana-v2';
 const ASSETS = ['./', './index.html', './NotEnoughMana.json'];
 
 self.addEventListener('install', (e) => {
